@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const { logger, validateUserId, validateUser, validatePostId, validatePost } = require("../middleware/middleware");
+
 router.get('/', (req, res) => {
   // do your magic!
 });
@@ -22,3 +24,5 @@ router.put('/:id', (req, res) => {
 });
 
 // do not forget to export the router
+
+module.exports = router

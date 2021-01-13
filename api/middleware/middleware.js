@@ -1,21 +1,27 @@
 function logger(req, res, next) {
-  // do your magic!
+  console.log("Method: ", `"${Object.keys(req.route.methods)}"`)
+  console.log("Path: ", `"${req.route.path}"`)
+  var timestamp = Number(new Date())
+  var date = new Date(timestamp).toDateString();
+  console.log("Timestamp: ", date)
+  next()
 }
 
 function validateUserId(req, res, next) {
-  // do your magic!
+  next()
 }
 
 function validateUser(req, res, next) {
-  // do your magic!
+  next()
 }
 
 function validatePostId(req, res, next) {
-  // do your magic!
+  next()
 }
 
 function validatePost(req, res, next) {
-  // do your magic!
+  next()
 }
 
 // do not forget to expose these functions to other modules
+module.exports = { logger, validateUserId, validateUser, validatePostId, validatePost }

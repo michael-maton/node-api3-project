@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require("./users-model");
+const Users = require("./users-model");
 const { logger, validateUserId, validateUser, validatePostId, validatePost } = require("../middleware/middleware");
 
 router.post('/', (req, res) => {
@@ -10,7 +10,7 @@ router.post('/', (req, res) => {
 
 router.get('/', logger, (req, res) => {
   // do your magic!
-  User.get()
+  Users.get()
     .then(user => {
       res.status(200).json(user)
     })
@@ -19,14 +19,23 @@ router.get('/', logger, (req, res) => {
     })
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', logger, validateUserId, (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
+  res.status(200).json(req.user);
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', logger, validateUserId, (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
+  Users.remove(req.params.id)
+    .then(() => {
+      res.status(200).json({ message: `User with id ${req.params.id} has been deleted`})
+    })
+    .catch(error => {
+      res.status(500).json({ error: "There was an error deleing the user"} )
+    })
+
 });
 
 router.put('/:id', (req, res) => {

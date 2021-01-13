@@ -1,82 +1,100 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const Users = require("./users-model");
 const Posts = require("../posts/posts-model");
-const { logger, validateUserId, validateUser, validatePostId, validatePost } = require("../middleware/middleware");
+const {
+  logger,
+  validateUserId,
+  validateUser,
+  validatePost,
+  validatePostId,
+} = require("../middleware/middleware");
 
-router.post('/', logger, validateUser, (req, res) => {
+router.post("/", logger, validateUser, (req, res) => {
   // do your magic!
   // this needs a middleware to check that the request body is valid
   // validateUser
   Users.insert(req.body)
     .then((newUser) => {
-      res.status(201).json(newUser)
+      res.status(201).json(newUser);
     })
-    .catch(error => {
-      res.status(500).json({ error: "Error creating user"} )
-    })
+    .catch((error) => {
+      res.status(500).json({ error: "Error creating user" });
+    });
 });
 
-router.get('/', logger, (req, res) => {
+router.get("/", logger, (req, res) => {
   // do your magic!
   Users.get()
-    .then(user => {
-      res.status(200).json(user)
+    .then((user) => {
+      res.status(200).json(user);
     })
-    .catch(error => {
-      res.status(500).json({ error: "Error retrieving user"} )
-    })
+    .catch((error) => {
+      res.status(500).json({ error: "Error retrieving user" });
+    });
 });
 
-router.get('/:id', logger, validateUserId, (req, res) => {
+router.get("/:id", logger, validateUserId, (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
   res.status(200).json(req.user);
 });
 
-router.delete('/:id', logger, validateUserId, (req, res) => {
+router.delete("/:id", logger, validateUserId, (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
   Users.remove(req.params.id)
     .then(() => {
-      res.status(200).json({ message: `User with id ${req.params.id} has been deleted`})
+      res
+        .status(200)
+        .json({ message: `User with id ${req.params.id} has been deleted` });
     })
-    .catch(error => {
-      res.status(500).json({ error: "There was an error deleting the user"} )
-    })
-
+    .catch((error) => {
+      res.status(500).json({ error: "There was an error deleting the user" });
+    });
 });
 
-router.put('/:id', logger, validateUserId, validateUser, (req, res) => {
+router.put("/:id", logger, validateUserId, validateUser, (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
   Users.update(req.params.id, req.body)
     .then(() => {
-      res.status(201).json(req.body)
+      res.status(201).json(req.body);
     })
     .catch(() => {
-      res.status(500).json({ error: "Error editing user"} )
-    })
+      res.status(500).json({ error: "Error editing user" });
+    });
 });
 
-router.post('/:id/posts', logger, (req, res) => {
+router.post("/:id/posts", logger, validateUserId, validatePost, (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
+  let newPost = {
+    text: req.body.text,
+    user_id: req.params.id,
+  };
+  Posts.insert(newPost)
+    .then(() => {
+      res.status(201).json(newPost);
+    })
+    .catch((error) => {
+      res.status(500).json({ error: "Error creating post" });
+    });
 });
 
-router.get('/:id/posts', logger, validateUserId, (req, res) => {
+router.get("/:id/posts", logger, validateUserId, (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
   Users.getUserPosts(req.params.id)
-    .then(posts => {
-      res.status(200).json(posts)
+    .then((posts) => {
+      res.status(200).json(posts);
     })
-    .catch(error => {
-      res.status(500).json({ error: "There was an error deleting the user"} )
-    })
+    .catch((error) => {
+      res.status(500).json({ error: "There was an error deleting the user" });
+    });
 });
 
 // do not forget to export the router
-module.exports = router
+module.exports = router;

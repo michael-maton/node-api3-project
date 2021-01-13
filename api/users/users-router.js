@@ -56,7 +56,7 @@ router.put('/:id', logger, validateUserId, validateUser, (req, res) => {
       res.status(201).json(req.body)
     })
     .catch(() => {
-      res.status(500).json({ error: "Error creating user"} )
+      res.status(500).json({ error: "Error editing user"} )
     })
 });
 

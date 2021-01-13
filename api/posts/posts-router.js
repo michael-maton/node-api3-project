@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Posts = require("./posts-model");
 
-const { logger, validateUserId, validateUser, validatePostId, validatePost } = require("../middleware/middleware");
+const { logger, validatePostId, validatePost } = require("../middleware/middleware");
 
 router.get('/', logger, (req, res) => {
   // do your magic!
@@ -33,9 +33,17 @@ router.delete('/:id', logger, validatePostId, (req, res) => {
     })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', logger, validatePostId, validatePost, (req, res) => {
   // do your magic!
   // this needs a middleware to verify post id
+  // this needs a middleware to check that the request body is valid
+  Posts.update(req.params.id, req.body)
+    .then(updatedPost => {
+      res.status(200).json(req.body)
+    })
+    .catch(() => {
+      res.status(500).json({ error: "Error editing post"} )
+    })
 });
 
 // do not forget to export the router

@@ -52,7 +52,8 @@ async function validatePostId(req, res, next) {
 }
 
 function validatePost(req, res, next) {
-  next()
+  console.log("checking form")
+  req.body.text ? next() : res.status(400).json({ error: "please provide text" })
 }
 
 // do not forget to expose these functions to other modules

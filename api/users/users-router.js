@@ -3,14 +3,12 @@ const router = express.Router();
 const Users = require("./users-model");
 const Posts = require("../posts/posts-model");
 const {
-  logger,
   validateUserId,
   validateUser,
   validatePost,
-  validatePostId,
 } = require("../middleware/middleware");
 
-router.post("/", logger, validateUser, (req, res) => {
+router.post("/", validateUser, (req, res) => {
   // do your magic!
   // this needs a middleware to check that the request body is valid
   // validateUser
@@ -23,7 +21,7 @@ router.post("/", logger, validateUser, (req, res) => {
     });
 });
 
-router.get("/", logger, (req, res) => {
+router.get("/", (req, res) => {
   // do your magic!
   Users.get()
     .then((user) => {
@@ -34,13 +32,13 @@ router.get("/", logger, (req, res) => {
     });
 });
 
-router.get("/:id", logger, validateUserId, (req, res) => {
+router.get("/:id", validateUserId, (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
   res.status(200).json(req.user);
 });
 
-router.delete("/:id", logger, validateUserId, (req, res) => {
+router.delete("/:id", validateUserId, (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
   Users.remove(req.params.id)
@@ -54,7 +52,7 @@ router.delete("/:id", logger, validateUserId, (req, res) => {
     });
 });
 
-router.put("/:id", logger, validateUserId, validateUser, (req, res) => {
+router.put("/:id", validateUserId, validateUser, (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
@@ -67,7 +65,7 @@ router.put("/:id", logger, validateUserId, validateUser, (req, res) => {
     });
 });
 
-router.post("/:id/posts", logger, validateUserId, validatePost, (req, res) => {
+router.post("/:id/posts", validateUserId, validatePost, (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
@@ -84,7 +82,7 @@ router.post("/:id/posts", logger, validateUserId, validatePost, (req, res) => {
     });
 });
 
-router.get("/:id/posts", logger, validateUserId, (req, res) => {
+router.get("/:id/posts", validateUserId, (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
   Users.getUserPosts(req.params.id)

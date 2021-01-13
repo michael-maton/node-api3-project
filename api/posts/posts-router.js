@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Posts = require("./posts-model");
 
-const { logger, validatePostId, validatePost } = require("../middleware/middleware");
+const { validatePostId, validatePost } = require("../middleware/middleware");
 
-router.get('/', logger, (req, res) => {
+router.get('/', (req, res) => {
   // do your magic!
   Posts.get()
     .then(post => {
@@ -15,13 +15,13 @@ router.get('/', logger, (req, res) => {
     })
 });
 
-router.get('/:id', logger, validatePostId, (req, res) => {
+router.get('/:id', validatePostId, (req, res) => {
   // do your magic!
   // this needs a middleware to verify post id
   res.status(200).json(req.post)
 });
 
-router.delete('/:id', logger, validatePostId, (req, res) => {
+router.delete('/:id', validatePostId, (req, res) => {
   // do your magic!
   // this needs a middleware to verify post id
   Posts.remove(req.params.id)
@@ -33,7 +33,7 @@ router.delete('/:id', logger, validatePostId, (req, res) => {
     })
 });
 
-router.put('/:id', logger, validatePostId, validatePost, (req, res) => {
+router.put('/:id', validatePostId, validatePost, (req, res) => {
   // do your magic!
   // this needs a middleware to verify post id
   // this needs a middleware to check that the request body is valid

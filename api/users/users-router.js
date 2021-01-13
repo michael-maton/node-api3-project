@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Users = require("./users-model");
+const Posts = require("../posts/posts-model");
 const { logger, validateUserId, validateUser, validatePostId, validatePost } = require("../middleware/middleware");
 
 router.post('/', logger, validateUser, (req, res) => {

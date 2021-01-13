@@ -34,8 +34,21 @@ function validateUser(req, res, next) {
   req.body.name ? next() : res.status(400).json({ error: "please provide name" })
 }
 
-function validatePostId(req, res, next) {
-  next()
+async function validatePostId(req, res, next) {
+  console.log('checking post id')
+  try {
+    const post = await Posts.getById(req.params.id)
+    if (post) {
+      req.post = post
+      console.log(`Post id ${req.params.id} found`)
+      next()
+    } else {
+      console.log(`Post with id ${req.params.id} not found`)
+      res.status(404).json(`Post with id ${req.params.id} not found`)
+    }
+  } catch (error) {
+    res.status(500).json('error')
+  }
 }
 
 function validatePost(req, res, next) {

@@ -4,13 +4,21 @@ const Posts = require("./posts-model");
 
 const { logger, validateUserId, validateUser, validatePostId, validatePost } = require("../middleware/middleware");
 
-router.get('/', (req, res) => {
+router.get('/', logger, (req, res) => {
   // do your magic!
+  Posts.get()
+    .then(post => {
+      res.status(200).json(post)
+    })
+    .catch(error => {
+      res.status(500).json({ error: "Error retrieving posts"} )
+    })
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', logger, validatePostId, (req, res) => {
   // do your magic!
   // this needs a middleware to verify post id
+  res.status(200).json(req.post)
 });
 
 router.delete('/:id', (req, res) => {
